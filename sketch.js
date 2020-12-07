@@ -1,61 +1,65 @@
 var canvas, backgroundImage;
 var enemy;
-var gameState = 0;
-var playerCount;
-var allPlayers;
-var distance = 0;
-var database;
 var enemyGroup;
-var form, player, game;
-var position;
-var cars, car1, car2;
-
+var car, car1, car2;
 var track, car1_img, car2_img;
 
 function preload(){
   track = loadImage("../images/track.jpg");
-  background_img = loadImage("../images/Bg.png");
   car1_img = loadImage("../images/car1.png");
-  car2_img = loadImage("../images/1.png");
-  ground = loadImage("../images/ground.png");
+  ground = loadImage("../images/track.jpg");
   enemy_img = loadImage("images/car2.png");
 }
 
 function setup(){
-  canvas = createCanvas(displayWidth + 30, displayHeight + 70);
-  background(background_img);
-  database = firebase.database();
-  game = new Game();
-  game.getState();
-  game.start();
+  canvas = createCanvas(displayWidth - 20, displayHeight-30);
+ 
+  car = createSprite(500,500);
+  car.addImage(car1_img);
+ // car.y = 7950;
+
   enemyGroup = new Group();
 }
 
 
 function draw(){
-  if(playerCount === 1){
-    game.update(1);
-  }
-  if(gameState === 1){
-    clear();
-    game.play();
-  }
-  if(gameState === 2){
-    game.end();
+  background(rgb(198,135,103));
+      image(track, 0,-displayHeight*4,displayWidth, displayHeight*5);
+  // camera.position.x = car.x;
+  camera.position.y = car.y;
+
+  if(car.y!=-2440){
+  
+  if(keyIsDown(UP_ARROW)){
+    car.y=car.y-14;
+   }
+ 
+   if(keyIsDown(RIGHT_ARROW)){
+     car.x=car.x+20;
+    }
+ 
+    if(keyIsDown(LEFT_ARROW)){
+     car.x=car.x-20;
+    }
   }
 
+  
+   console.log(car.y)
+  
   spawnEnemys();
+  drawSprites();
 }
 
 
 function spawnEnemys(){
-if (frameCount % 60 === 0) {
-  var enemy = createSprite(800,-displayHeight,40,10);
+if (frameCount % 10 === 0) {
+  var enemy = createSprite(500,500);
   //enemy.y = Math.round(random(0,10));
-  enemy.x = Math.round(random(300,800));
-  enemy.y = Math.round(random(100,-displayHeight-1200));
+  enemy.x = Math.round(random(100,1000));
 
-  enemy.velocityY = -2;
+  
+
+  enemy.velocityY = -10;
   enemy.addImage(enemy_img);
   
    //assign lifetime to the variable
